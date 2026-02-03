@@ -8,4 +8,16 @@ public class Doctor {
         this.speciality = speciality;
         this.ID = ID;
     }
+    
+    public String getId() {
+        return ID;
+    }
+
+    public String toCSV() {
+        return ID + "," + name + "," + speciality;
+    }
+
+    public String toString() {
+        return ID + " - " + name + " (" + speciality + ")";
+    }
 }

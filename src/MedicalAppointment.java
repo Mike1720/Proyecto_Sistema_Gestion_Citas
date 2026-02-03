@@ -12,4 +12,14 @@ public class MedicalAppointment {
         this.doctor = doctor;
         this.patient = patient;
     }
+
+    public String toCSV() {
+        return appointmentID + "," + date + "," + appointmentMotive + ","
+                + doctor.getId() + "," + patient.getMedicalRecordNumber();
+    }
+
+    public String toString() {
+        return appointmentID + " | " + date + " | "
+                + doctor + " | " + patient;
+    }
 }

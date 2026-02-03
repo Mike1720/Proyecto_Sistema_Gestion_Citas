@@ -9,9 +9,9 @@ public class Main {
         String user = input.nextLine();
 
         System.out.print("Contraseña: ");
-        String p = input.nextLine();
+        String password = input.nextLine();
 
-        if (admin.authenticateUser(user, p)) {
+        if (admin.authenticateUser(user, password)) {
 
             MainSystem system = new MainSystem();
             system.menu();

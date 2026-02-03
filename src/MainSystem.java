@@ -7,6 +7,10 @@ public class MainSystem {
     private ArrayList<MedicalAppointment> appointments = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
 
+    private int counterDoctors = 1;
+    private int counterPatients = 1;
+    private int counterAppointments = 1;
+
     public void menu() {
         int option;
 
@@ -29,6 +33,10 @@ public class MainSystem {
                 case 4 -> showDoctors();
                 case 5 -> showPatients();
                 case 6 -> showAppointments();
+                case 7 -> {
+                    return;
+                }
+
                 default -> System.out.println("Opción inválida.");
             }
 
@@ -37,17 +45,12 @@ public class MainSystem {
 
     private void instanceDoctor() {
 
-        String id = Validator.readID(scanner, "ID Doctor: ");
+        String ID = generateDoctorID();
 
-        if (searchDoctor(id) != null) {
-            System.out.println("Doctor ya existe.");
-            return;
-        }
+        String name = Validator.readText(scanner, "Nombre: ");
+        String speciality = Validator.readText(scanner, "Especialidad: ");
 
-        String nombre = Validator.readText(scanner, "Nombre: ");
-        String esp = Validator.readText(scanner, "Especialidad: ");
-
-        Doctor doctor = new Doctor(id, nombre, esp);
+        Doctor doctor = new Doctor(name, speciality, ID);
 
         doctors.add(doctor);
         FileUtil.saveData("doctores.csv", doctor.toCSV());
@@ -57,16 +60,11 @@ public class MainSystem {
 
     private void instancePatient() {
 
-        String id = Validator.readID(scanner, "ID Paciente: ");
+        String ID = generatePatientID();
 
-        if (searchPatient(id) != null) {
-            System.out.println("Paciente ya existe.");
-            return;
-        }
+        String name = Validator.readText(scanner, "Nombre: ");
 
-        String nombre = Validator.readText(scanner, "Nombre: ");
-
-        Patient patient = new Patient(id, nombre);
+        Patient patient = new Patient(name, ID);
 
         patients.add(patient);
         FileUtil.saveData("pacientes.csv", patient.toCSV());
@@ -76,25 +74,39 @@ public class MainSystem {
 
     private void createAppointment() {
 
-        String ID = Validator.readID(scanner, "ID Cita: ");
+        if (doctors.isEmpty() || patients.isEmpty()) {
+            System.out.println("Debe existir al menos un doctor y un paciente.");
+            return;
+        }
+
+        String ID = generateAppointmentID();
+        System.out.println("ID Cita: " + ID);
+
         String date = Validator.readText(scanner, "Fecha y hora: ");
         String motive = Validator.readText(scanner, "Motivo: ");
 
-        String doctorID = Validator.readID(scanner, "ID Doctor: ");
-        Doctor doctor = searchDoctor(doctorID);
+        Doctor doctor;
 
-        if (doctor == null) {
-            System.out.println("Doctor no existe.");
-            return;
-        }
+        do {
+            showDoctors();
+            String doctorID = Validator.readText(scanner, "Ingrese el ID del Doctor: ");
+            doctor = searchDoctor(doctorID);
 
-        String patientID = Validator.readID(scanner, "ID Paciente: ");
-        Patient patient = searchPatient(patientID);
+            if (doctor == null) {
+                System.out.println("Doctor no existe.");
+            }
+        } while (doctor == null);
 
-        if (patient == null) {
-            System.out.println("Paciente no existe.");
-            return;
-        }
+        Patient patient;
+        do {
+            showPatients();
+            String patientID = Validator.readText(scanner, "Ingrese el ID del Paciente: ");
+            patient = searchPatient(patientID);
+
+            if (patient == null) {
+                System.out.println("Paciente no existe.");
+            }
+        } while (patient == null);
 
         MedicalAppointment appointment = new MedicalAppointment(ID, date, motive, doctor, patient);
 
@@ -151,6 +163,18 @@ public class MainSystem {
                 return patient;
         }
         return null;
+    }
+
+    private String generateDoctorID() {
+        return String.format("DOC-%03d", counterDoctors++);
+    }
+
+    private String generatePatientID() {
+        return String.format("PAC-%03d", counterPatients++);
+    }
+
+    private String generateAppointmentID() {
+        return String.format("CIT-%03d", counterAppointments++);
     }
 
     private byte readByte() {

@@ -6,4 +6,17 @@ public class Patient {
         this.name = name;
         this.medicalRecordNumber = medicalRecordNumber;
     }
+
+    public String getMedicalRecordNumber() {
+        return medicalRecordNumber;
+    }
+
+    public String toCSV() {
+        return medicalRecordNumber + "," + name;
+    }
+
+    @Override
+    public String toString() {
+        return medicalRecordNumber + " - " + name;
+    }
 }

@@ -53,7 +53,7 @@ public class MainSystem {
         Doctor doctor = new Doctor(name, speciality, ID);
 
         doctors.add(doctor);
-        FileUtil.saveData("doctores.csv", doctor.toCSV());
+        FileUtil.saveData("db/doctores.csv", doctor.toCSV());
 
         System.out.println("Doctor registrado.");
     }
@@ -67,7 +67,7 @@ public class MainSystem {
         Patient patient = new Patient(name, ID);
 
         patients.add(patient);
-        FileUtil.saveData("pacientes.csv", patient.toCSV());
+        FileUtil.saveData("db/pacientes.csv", patient.toCSV());
 
         System.out.println("Paciente registrado.");
     }
@@ -111,7 +111,7 @@ public class MainSystem {
         MedicalAppointment appointment = new MedicalAppointment(ID, date, motive, doctor, patient);
 
         appointments.add(appointment);
-        FileUtil.saveData("citas.csv", appointment.toCSV());
+        FileUtil.saveData("db/citas.csv", appointment.toCSV());
 
         System.out.println("Cita creada.");
     }
